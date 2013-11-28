@@ -1,10 +1,9 @@
 var net = require('net'),
 	artemisIP = 'localhost',
 	artemisPort = 2011,
-	listenIP = '0.0.0.0',
+	listenIP = '130.89.165.64',
 	listenPort = 2010;
 
-var server = net.createServer(clientConnectionHandler);
 
 var clientConnectionHandler = function (clientConnection) {
 
@@ -31,6 +30,8 @@ var clientConnectionHandler = function (clientConnection) {
 	clientConnection.on('end', clientClosed);
 
 }
+
+var server = net.createServer(clientConnectionHandler);
 
 server.listen(listenPort, listenIP);
 console.log('Server listening...');
