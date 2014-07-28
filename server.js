@@ -4,27 +4,22 @@ var net = require('net'),
 	listenIP = '0.0.0.0',
 	listenPort = 2010;
 
+var Enummer = { 'Console' : 
+					{ 	'main screen' 	:0,
+						'helm'			:1,	
+						'weapons'		:2,
+						'engineering'	:3,
+						'science'		:4,
+						'communications':5,
+						'data'			:6,
+						'observer'		:7,
+						'captain\'s map':8,
+						'game master'	:9
+					},
+			  };
+
 var clientConnectionHandler = function (clientConnection) {
-<<<<<<< HEAD
 
-=======
-	
-    var Enummer = { 'Console' : 
-						{ 	'main screen' 	:0,
-							'helm'			:1,	
-							'weapons'		:2,
-							'engineering'	:3,
-							'science'		:4,
-							'communications':5,
-							'data'			:6,
-							'observer'		:7,
-							'captain\'s map':8,
-							'game master'	:9
-						},
-				  };
-
-	
->>>>>>> origin/master
 	console.log('New connection');
 
 	var clientData = new Buffer(0);
