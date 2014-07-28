@@ -4,7 +4,20 @@ var net = require('net'),
 	listenIP = '0.0.0.0',
 	listenPort = 2010;
 
-var Enummer = { 'Console' : 
+var Enummer = { 'origin' : {
+					'server': 0x01,
+					'client': 0x02
+				},
+				'packets': {
+					'shipactionpacket': {
+						'header': 0x4c821d3c,
+						'subtypes': {
+							'setship': 0x0d,
+							'setconsole': 0x0e
+						}
+					}
+				},
+				'console' : 
 					{ 	'main screen' 	:0,
 						'helm'			:1,	
 						'weapons'		:2,
@@ -24,6 +37,8 @@ var clientConnectionHandler = function (clientConnection) {
 
 	var clientData = new Buffer(0);
 	var serverData = new Buffer(0);
+
+	var shipIndex = -1;
 
 	var serverConnected = function () {
 		clientConnection.pipe(serverConnection);
@@ -78,7 +93,18 @@ var clientConnectionHandler = function (clientConnection) {
 	}
 
 	var parsePacket = function (data) {
-		
+		var origin = data.readInt32LE(8);
+		var packetType = data.readInt32LE(20);
+
+		if (origin == Enummer.origin.client) {
+			if (packetType == Enummer.packets.shipactionpacket.header) {
+				var subType = data.readInt32LE(24);
+
+				if (subType == Enummer.packets.shipactionpacket.subtypes.setship) {
+					shipIndex = data.readInt32LE(28);
+				}
+			}
+		}
 	}
 
 	var hexify = function (data) {
