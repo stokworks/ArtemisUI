@@ -8,17 +8,26 @@
 <button id=5>long range</button>
 <button id=6>status</button>
 
-<script>
+<script type="text/javascript">
 var buttons = document.getElementsByTagName('button');
-    for(var i = 0; i < buttons.length; i++){
-		var button = buttons[i];
-		button.addEventListener('click', function(button){
-			var req	= XMLHttpRequest();
-			req.open('GET','changeview?id='+this.id,true);
-			req.send();
-			console.log('button id: ' + this.id);
-		},true);
-	}
+
+for (var i = 0; i < buttons.length; i++) {
+	var button = buttons[i];
+
+	button.addEventListener('click', function(button) {
+		var req	= new XMLHttpRequest();
+		req.open('GET', '/changeview?id='+this.id+'&r='+Math.random(), true);
+		req.send();
+		console.log('button id: ' + this.id);
+	}, true);
+
+	button.addEventListener('touchstart', function(button) {
+		var req	= new XMLHttpRequest();
+		req.open('GET', '/changeview?id='+this.id+'&r='+Math.random(), true);
+		req.send();
+		console.log('button id: ' + this.id);
+	}, true);
+}
 </script>
 </body>
 </html>

@@ -27,13 +27,7 @@ exports.gui = function (clients) {
 			0x3c, 0x1d, 0x82, 0x4c,
 			0x01, 0x00, 0x00, 0x00,
 			0x05, 0x00, 0x00, 0x00 ]);
-		
 
-		
-		
-		var client = clients[0];
-
-		console.log('LRS');
 		if(url.parse(req.url).pathname == '/views'){
 			    res.writeHead(200, {
 					'Content-Length' : html.length,
@@ -45,8 +39,6 @@ exports.gui = function (clients) {
 			res.end();
 			viewChangePacket[28] =  parseInt(url.parse(req.url, true).query.id);
 			clients[0].serverConnection.write(viewChangePacket);
-				
-			)
 		}
 		
 			
