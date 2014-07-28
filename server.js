@@ -38,7 +38,8 @@ var clientConnectionHandler = function (clientConnection) {
 	var clientData = new Buffer(0);
 	var serverData = new Buffer(0);
 
-	var shipIndex = -1;
+	var shipIndex = -1,
+		consoles  = []; 	
 
 	var serverConnected = function () {
 		clientConnection.pipe(serverConnection);
@@ -99,9 +100,20 @@ var clientConnectionHandler = function (clientConnection) {
 		if (origin == Enummer.origin.client) {
 			if (packetType == Enummer.packets.shipactionpacket.header) {
 				var subType = data.readInt32LE(24);
-
-				if (subType == Enummer.packets.shipactionpacket.subtypes.setship) {
+				var subs = Enummer.packets.shipactionpacket.subtypes;
+				if (subType == subs.setship) {
 					shipIndex = data.readInt32LE(28);
+				}
+				// add/remove consoles from client
+				if (subType == subs.setconsole){
+				    var console 	= data.readInt32LE(28);
+					var selected 	= data.readInt32LE(32);
+					var consoleIndex = consoles.indexOf(console);
+					if(selected && consoleIndex === -1 ){
+						consoles.push(console);
+					}else if(!selected && consoleIndex !== -1){
+						consoles.splice(consoleIndex,1);
+					}
 				}
 			}
 		}
