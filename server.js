@@ -5,7 +5,7 @@ var net = require('net'),
 	listenPort = 2010;
 
 var clientConnectionHandler = function (clientConnection) {
-	
+
 	console.log('New connection');
 
 	var clientData = new Buffer(0);
@@ -32,19 +32,19 @@ var clientConnectionHandler = function (clientConnection) {
 
 	var clientDataReceived = function (data) {
 		clientData = Buffer.concat([clientData, data]);
-		clientData = parseArtemisStream(clientData);
+		clientData = parseArtemisStream(clientData, parsePacket);
 
 		console.log('SERVER <-- CLIENT: ' + hexify(data));
 	}
 
 	var serverDataReceived = function (data) {
 		serverData = Buffer.concat([serverData, data]);
-		serverData = parseArtemisStream(serverData);
+		serverData = parseArtemisStream(serverData, parsePacket);
 
 		console.log('SERVER --> CLIENT: ' + hexify(data));
 	}
 
-	var parseArtemisStream = function (data) {
+	var parseArtemisStream = function (data, cb) {
 		if (data.length < 8) {
 			// 0xdeadbeef + packet length
 			return data;
@@ -55,8 +55,16 @@ var clientConnectionHandler = function (clientConnection) {
 		if (data.length < packetLength) {
 			return data;
 		} else {
-			return parseArtemisStream(data.slice(packetLength));
+			if (cb) {
+				cb(data.slice(0, packetLength));
+			}
+
+			return parseArtemisStream(data.slice(packetLength), cb);
 		}
+	}
+
+	var parsePacket = function (data) {
+		
 	}
 
 	var hexify = function (data) {
